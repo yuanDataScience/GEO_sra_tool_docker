@@ -7,3 +7,5 @@ s3 bucket will be stored in the designated s3 folder.
 
 In addition, the instruction.ipynb jupyter notebook contains all the aws cli and docker command to build and push the docker
 to AWS ECR and run the docker image in AWS ECS
+
+Please note that there may be many fastq.gz files to download, and the docker will also download SRA_Accessions.tab in the docker container instance, which is >5 G. Therefore, please make sure the cluster/EC2 instances running the docker has enough space.
