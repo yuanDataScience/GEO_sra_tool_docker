@@ -1,0 +1,3 @@
+
+
+docker run -d -v $(pwd):/root/ncbi/public/sra [yourdockerimage] GSEXXXXXX s3://yours3bucketfolder/(s3 bucket folder MUST ended by /)
