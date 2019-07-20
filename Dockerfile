@@ -1,7 +1,7 @@
 FROM python:3
 
-LABEL maintainer="Yuan Huang <yuahuang@celgene.com>" \
-      version="1.0"
+LABEL maintainer="Yuan Huang <huangyuan2000@hotmail.com>" \
+      version="2.0"
 
 RUN apt-get update -y && apt-get install -y wget && \
     apt-get install -y lftp && \
@@ -29,9 +29,13 @@ RUN curl -s ftp://ftp.ncbi.nlm.nih.gov/entrez/entrezdirect/edirect.tar.gz | \
 
 COPY installconfirm /usr/local/ncbi/edirect/
 COPY sra.sh /usr/local/ncbi/edirect/
+COPY sra_ecr.sh /usr/local/ncbi/edirect/
+COPY srr_missing_file.sh /usr/local/ncbi/edirect/
 
 WORKDIR /
 COPY sra.sh /
+COPY sra_ecr.sh /
+COPY srr_missing_file.sh /
 
 ENV PATH="/usr/bin:/usr/local/ncbi/edirect:${PATH}"
 ENTRYPOINT ["sra.sh"]
