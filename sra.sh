@@ -2,48 +2,39 @@
 
 
 GSE=$1
-s3_header=$2
+s3_folder=$2  # the s3_folder should contain / at the end
+DATE=`date '+%Y%m%d'`
 
-rs=()
+# define the s3 folder to save the fastq.gz files 
+folder_name="$s3_folder$GSE.$DATE/"
+
+# extract srx numbers for the given GSE number
 srx=$(esearch -db gds -query "$GSE[ACCN] AND GSM[ETYP]" | \
   efetch -format docsum | \
   xtract -pattern ExtRelation -element TargetObject)
 
-for a in ${srx[@]}; do
-  srr=$(esearch -db sra -query "$a[ACCN]" | efetch -format docsum | \
+# traverse the srr numbers, download, validate and convert the sra
+# files to fastq files, and delelte the sra and fastq files after
+# pushing the fasfq files to s3 folder
+for a in ${srx[@]}; do 
+       	srr=$(esearch -db sra -query "$a[ACCN]" | efetch -format docsum | \
     xtract -pattern DocumentSummary  -element Run@acc)
-  rs+=( $srr )
-  prefetch $srr
-done
-
-gsms=()
-gsm=$(esearch -db gds -query "$GSE[ACCN] AND GSM[ETYP]" | efetch -format docsum | xtract -pattern DocumentSummary -element Accession);
-  
-echo $pwd  	
-
-cd /root
-lftp -c "open ftp.ncbi.nlm.nih.gov/sra/reports/Metadata && get SRA_Accessions.tab"
  
-cd /root/ncbi/public/sra
-fastq-dump --split-files -I --gzip *.sra
-
-grep ^SRR /root/SRA_Accessions.tab | grep GSM >srr_gsm.txt
-rm -f /root/SRA_Accessions.tab
-
-for a in ${gsm[@]}; do
-    grep $a srr_gsm.txt | sed 's/_r[0-9]*//' | cut -d $'\t' -f 10,11,1 >> map_batch.out;
-done    
-
-srr_gsm_map="map_batch.out"
-DATE=`date '+%Y%m%d'`
-gz_files=$(ls *.gz);
-folder_name="$s3_header$GSE.$DATE/"
-s3list="s3list.txt"
-
-for f in $gz_files; do
-   aws s3 cp $f $folder_name$f  --profile personal;
-   echo $folder_name$f >> s3list.txt;
+  # download, validate and convert each sra file to fastq file(s)  
+  prefetch $srr && vdb-validate $srr && cd /root/ncbi/public/sra && fastq-dump --split-files -I --gzip *.sra
+  
+  # remove the downloaded sra file  
+  rm -f *.sra
+  
+ # find and push all the fastq.gz files to s3 folder, and then delete the fastq.gz file from docker container 
+  gz_files=$(ls *.gz)
+  for f in $gz_files; do
+     aws s3 cp $f $folder_name$f  --profile personal;
+     echo $folder_name$f >> s3list.txt;
+     rm -f $f
+  done   
 done
 
+cd /root/ncbi/public/sra
+s3list="s3list.txt"
 aws s3 cp s3list.txt $folder_name$s3list --profile personal 
-aws s3 cp map_batch.out $folder_name$srr_gsm_map --profile personal 
