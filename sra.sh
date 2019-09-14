@@ -29,7 +29,7 @@ for a in ${srx[@]}; do
  # find and push all the fastq.gz files to s3 folder, and then delete the fastq.gz file from docker container 
   gz_files=$(ls *.gz)
   for f in $gz_files; do
-     aws s3 cp $f $folder_name$f  --profile personal;
+     aws s3 cp $f $folder_name$f;
      rm -f $f
   done   
 done
