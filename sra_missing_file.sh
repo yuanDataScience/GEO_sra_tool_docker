@@ -10,15 +10,16 @@
 srrs=${@:2}
 folder_name=$1
 
-for a in ${srrs[@]}; do
-  prefetch $a
+for srr in ${srrs[@]}; do
+   prefetch $srr && vdb-validate $srr && cd /root/ncbi/public/sra && fastq-dump --split-files -I --gzip *.sra
+  rm -f *.sra
+
+   # find and push all the fastq.gz files to s3 folder, and then delete the fastq.gz file from docker container
+  gz_files=$(ls *.gz)
+  for f in $gz_files; do
+     aws s3 cp $f $folder_name$f;
+     rm -f $f
+  done
 done
 
-cd /root/ncbi/public/sra
-fastq-dump --split-files -I --gzip *.sra
-
-gz_files=$(ls *.gz);
-for f in $gz_files; do
-  aws s3 cp $f $folder_name$f --profile personal
-done    
 

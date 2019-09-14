@@ -3,10 +3,10 @@
 
 GSE=$1
 s3_folder=$2  # the s3_folder should contain / at the end
-DATE=`date '+%Y%m%d'`
+#DATE=`date '+%Y%m%d'`
 
 # define the s3 folder to save the fastq.gz files 
-folder_name="$s3_folder$GSE.$DATE/"
+folder_name="$s3_folder$GSE/"
 
 # extract srx numbers for the given GSE number
 srx=$(esearch -db gds -query "$GSE[ACCN] AND GSM[ETYP]" | \
@@ -30,11 +30,7 @@ for a in ${srx[@]}; do
   gz_files=$(ls *.gz)
   for f in $gz_files; do
      aws s3 cp $f $folder_name$f  --profile personal;
-     echo $folder_name$f >> s3list.txt;
      rm -f $f
   done   
 done
 
-cd /root/ncbi/public/sra
-s3list="s3list.txt"
-aws s3 cp s3list.txt $folder_name$s3list --profile personal 

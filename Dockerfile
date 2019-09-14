@@ -14,7 +14,6 @@ RUN apt-get update -y && apt-get install -y wget && \
     rm -fr /sratoolkit.2.9.2-ubuntu64*  
 
 RUN pip install awscli && mkdir /root/.aws  
-COPY ./.aws /root/.aws
 
 USER root
 WORKDIR /usr/local/ncbi
@@ -29,14 +28,13 @@ RUN curl -s ftp://ftp.ncbi.nlm.nih.gov/entrez/entrezdirect/edirect.tar.gz | \
 
 COPY installconfirm /usr/local/ncbi/edirect/
 COPY sra.sh /usr/local/ncbi/edirect/
-COPY sra_ecr.sh /usr/local/ncbi/edirect/
-COPY srr_missing_file.sh /usr/local/ncbi/edirect/
+COPY sra_missing_file.sh /usr/local/ncbi/edirect/
+COPY gsm_map.sh /usr/local/ncbi/edirect/
 
 WORKDIR /
 COPY sra.sh /
-COPY sra_ecr.sh /
-COPY srr_missing_file.sh /
-
+COPY sra_missing_file.sh /
+COPY gsm_map.sh /
 ENV PATH="/usr/bin:/usr/local/ncbi/edirect:${PATH}"
 ENTRYPOINT ["sra.sh"]
 CMD []
