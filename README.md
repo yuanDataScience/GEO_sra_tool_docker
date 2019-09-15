@@ -17,7 +17,7 @@ export AWS_DEFAULT_REGION="<region>"
 docker run --rm -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION}" -d huangyuan2000/geo_download_to_s3 GSEXXXXXX s3://yours3bucketfolder/(s3 bucket folder MUST ended by /) 
 ```
 
-### To downloading missing fastq.gz files by designating the s3 folder and srr numbers
+### To downloading missing fastq.gz files by designating the s3 folder and SRR numbers
 It is inevitable that some files will be missed when downloading by GSE number, especially when a specific GSE number contains large amount of samples. Once you figure out the list of the missed SRR numbers for a given GSE download, you can use this command to upload the missed fastq.gz files to the designated s3 folder.
  
 ```
@@ -26,7 +26,7 @@ docker run --rm -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCES
 
 ### To obtain the mapping files for all the gsm -> srr numbers for given GSE numbers (can be multiple GSE numbers)
 
-#### a. to upload the mapping file to the designated s3 folder:
+#### a. to upload the mapping files to the designated s3 folder:
 ```
 docker run --rm -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION}" -d  --entrypoint sra_missing_file.sh huangyuan2000/geo_download_to_s3 s3://yours3bucketfolder/(s3 bucket folder MUST ended by /) GSExxxxxxx GSExxxxxxx ...
 ```
