@@ -20,7 +20,7 @@ cd /home
 grep ^SRR /root/SRA_Accessions.tab | grep GSM >srr_gsm.txt
 
 for g in ${GSE[@]};do
-	gsm=$(esearch -db gds -query "$GSE[ACCN] AND GSM[ETYP]" | efetch -format docsum | xtract -pattern DocumentSummary -element Accession);
+	gsm=$(esearch -db gds -query "$g[ACCN] AND GSM[ETYP]" | efetch -format docsum | xtract -pattern DocumentSummary -element Accession);
         gse_file="map_batch$g.txt"
 
     for a in ${gsm[@]}; do
