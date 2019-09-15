@@ -10,7 +10,7 @@ elif [ $mode == "local" ]; then
    GSE=$@	
 else
      echo "the MODE environment varialbe has invalid value"
-     exit
+     exit 1
 fi
 
 cd /root
