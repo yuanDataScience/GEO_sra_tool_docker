@@ -12,11 +12,11 @@ export AWS_ACCESS_KEY_ID="<id>"
 export AWS_SECRET_ACCESS_KEY="<key>"
 export AWS_DEFAULT_REGION="<region>"
 ```
-### for downloading fastq.gz files of a specific GSE number:
+### To download fastq.gz files of a specific GSE number:
 
 docker run --name geo -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION}" -d -v $(pwd):/root/ncbi/public/sra [yourdockerimage] GSEXXXXXX s3://yours3bucketfolder/(s3 bucket folder MUST ended by /) 
 
-### for downloading missing fastq.gz files by designating the s3 folder and srr numbers
+### To downloading missing fastq.gz files by designating the s3 folder and srr numbers
 
 docker run --name geo -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION}" -d -v $(pwd):/root/ncbi/public/sra --entrypoint sra_missing_file.sh [yourdockerimage] s3://yours3bucketfolder/(s3 bucket folder MUST ended by /) SRRXXXXXXX SRRXXXXXXX
 
