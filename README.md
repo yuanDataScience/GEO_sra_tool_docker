@@ -28,7 +28,7 @@ docker run --rm -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCES
 
 #### a. to upload the mapping files to the designated s3 folder:
 ```
-docker run --rm -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION}" -d  --entrypoint --entrypoint gsm_map.sh huangyuan2000/geo_download_to_s3 s3://yours3bucketfolder/(s3 bucket folder MUST ended by /) GSExxxxxxx GSExxxxxxx ...
+docker run --rm -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION}" -d  --entrypoint gsm_map.sh huangyuan2000/geo_download_to_s3 s3://yours3bucketfolder/(s3 bucket folder MUST ended by /) GSExxxxxxx GSExxxxxxx ...
 ```
   
 #### b. to obtain and save the mapping files to the current local directory:
