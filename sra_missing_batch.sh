@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
-folder_name="$1/"
+GSE=$1
+s3_folder=$2  # the s3_folder should contain / at the end
+
+# define the s3 folder to save the fastq.gz files 
+folder_name="$s3_folder$GSE/"
 
 
 srrs=()
