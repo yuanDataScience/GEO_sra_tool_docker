@@ -31,6 +31,7 @@ for a in ${srx[@]}; do
   for f in $gz_files; do
      aws s3 cp $f $folder_name$f;
      rm -f $f
-  done   
+  done 
+  find . ! -name '*.txt' -type f -exec rm -f {} +
 done
 
